@@ -18,9 +18,14 @@ void vector_random(std::vector<int>& arr, int size_vector) {
 	}
 }
 
-void summ(std::vector<int>& arr, int num_1, int num_2, int i) {
+void summ(std::vector<int>& arr, std::vector<int>& veck_1, std::vector<int>& veck_2, int size_vector, int flow_num, int i) {
 
-	arr.at(i) = num_1 + num_2;
+	for (; i < size_vector; i += flow_num) {
+
+		arr.at(i) = veck_1.at(i) + veck_2.at(i);
+	}
+
+
 }
 
 //  Параллельное суммирование.
@@ -29,21 +34,21 @@ void addition(std::vector<int>& vect_1, std::vector <int>& vect_2, std::vector<s
 	std::vector <int> arr(size_vector);
 	int j = 0;
 
-	for (int i = 0; i < size_vector; i++) {
+	for (int i = 0; i < flow_num; i++) {
 		
-		if (i >= flow_num) {
+		//if (i >= flow_num) {
 
-			flow.at(j).join();
-		}
+		//	flow.at(j).join();
+		//}
 
-		flow.at(j) = std::thread(summ, std::ref(arr), vect_1.at(i), vect_2.at(i), i);
+		flow.at(i) = std::thread(summ, std::ref(arr), std::ref(vect_1), std::ref(vect_2), size_vector, flow_num, i);
 		
-		j++;
-		
-		if (j == flow_num) {
+		//j++;
+		//
+		//if (j == flow_num) {
 
-			j = 0;
-		}
+		//	j = 0;
+		//}
 	}
 
 	for (int i = 0; i < flow_num; i++) {
@@ -83,10 +88,10 @@ int main()
 	
 	auto num_flow = std::thread::hardware_concurrency();
 
-	int size_1 = 1000;
-	int size_2 = 10000;
-	int size_3 = 100000;
-	int size_4 = 1000000;
+	int size_1 = 10000;
+	int size_2 = 100000;
+	int size_3 = 1000000;
+	int size_4 = 10000000;
 
 	int flow_1 = 1;
 	int flow_2 = 2;
